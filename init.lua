@@ -6,7 +6,7 @@
 vim.opt.termguicolors = true
 
 -- reduce log size
-vim.lsp.set_log_level("error")
+vim.lsp.log.set_level("error")
 
 -- Leader
 vim.g.mapleader = " "
