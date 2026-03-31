@@ -45,7 +45,7 @@ vim.opt.winbar = "%f %m"
 local opts = { noremap = true, silent = true }
 
 -- Diagnostics / LSP
-vim.api.nvim_set_keymap('n', '<leader>ii', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.keymap.set('n', '<leader>ii', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
 
 -- Tabs
@@ -166,201 +166,84 @@ end, { range = true })
 
 
 -- =====================
--- PLUGINS (requires Packer + newer Neovim)
+-- PLUGINS
 -- =====================
 
--- disable netrw in favour of oil.nvim
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
-
-    -- LSP and Autocomplete
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
     use 'neovim/nvim-lspconfig'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'nvim-tree/nvim-web-devicons'
-
-    -- Oil file explorer
-    use {
-        'stevearc/oil.nvim',
-        config = function()
-            require('oil').setup({
-                default_file_explorer = true,
-                columns = { 'icon' },
-                view_options = {
-                    show_hidden = false,
-                },
-            })
-        end
-    }
-
-    -- Telescope
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = { 'nvim-lua/plenary.nvim' },
-        config = function()
-            require('telescope').setup({})
-        end
-    }
-
+    use 'stevearc/oil.nvim'
+    use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
     use 'tpope/vim-fugitive'
-    use {
-        'isak102/telescope-git-file-history.nvim',
-        requires = {
-            'tpope/vim-fugitive',
-            'nvim-telescope/telescope.nvim'
-        },
-        config = function()
-            require('telescope').load_extension('git_file_history')
-        end
-    }
-
-    -- Statusline
-    use {
-        'nvim-lualine/lualine.nvim',
-        requires = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            require('lualine').setup {
-                options = {
-                    icons_enabled = true,
-                    globalstatus = true,
-                },
-            }
-        end
-    }
-
-    -- Treesitter
+    use { 'isak102/telescope-git-file-history.nvim', requires = { 'tpope/vim-fugitive', 'nvim-telescope/telescope.nvim' } }
+    use 'nvim-lualine/lualine.nvim'
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-
-    -- Theme
-    use { 'bluz71/vim-moonfly-colors' }
-
-    -- Commenter
-    use {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
-    }
-
-    -- Git
-    use { 'akinsho/git-conflict.nvim', tag = "*", config = function()
-        require('git-conflict').setup()
-    end }
-
-    use {
-        'lewis6991/gitsigns.nvim',
-        config = function()
-            require('gitsigns').setup({
-                signs = {
-                    add          = { text = '┃' },
-                    change       = { text = '┃' },
-                    delete       = { text = '_' },
-                    topdelete    = { text = '‾' },
-                    changedelete = { text = '~' },
-                    untracked    = { text = '┆' },
-                },
-                signs_staged = {
-                    add          = { text = '┃' },
-                    change       = { text = '┃' },
-                    delete       = { text = '_' },
-                    topdelete    = { text = '‾' },
-                    changedelete = { text = '~' },
-                    untracked    = { text = '┆' },
-                },
-                signs_staged_enable = true,
-                signcolumn = true,
-                numhl      = false,
-                linehl     = false,
-                word_diff  = false,
-                watch_gitdir = { follow_files = true },
-                auto_attach = true,
-                attach_to_untracked = false,
-                current_line_blame = false,
-                current_line_blame_opts = {
-                    virt_text = true,
-                    virt_text_pos = 'eol',
-                    delay = 1000,
-                    ignore_whitespace = false,
-                    virt_text_priority = 100,
-                    use_focus = true,
-                },
-                current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
-                sign_priority = 6,
-                update_debounce = 100,
-                status_formatter = nil,
-                max_file_length = 40000,
-                preview_config = {
-                    style = 'minimal',
-                    relative = 'cursor',
-                    row = 0,
-                    col = 1
-                },
-            })
-        end
-    }
-
-    -- Window resize
-    use {
-        "sindrets/winshift.nvim",
-        config = function()
-            require("winshift").setup()
-        end
-    }
+    use 'bluz71/vim-moonfly-colors'
+    use 'numToStr/Comment.nvim'
+    use { 'akinsho/git-conflict.nvim', tag = "*" }
+    use 'lewis6991/gitsigns.nvim'
+    use "sindrets/winshift.nvim"
 end)
 
--- Mason setup
-require("mason").setup()
-require("mason-lspconfig").setup({})
+-- Plugin Setup (Modern Neovim 0.11+ style)
+require('mason').setup()
+require('mason-lspconfig').setup()
 
--- Treesitter
-local ts_status, ts = pcall(require, 'nvim-treesitter.configs')
-if ts_status then
-    ts.setup {
-        ensure_installed = { "lua", "python", "javascript", "html", "cpp" },
-        highlight = { enable = true },
-    }
-else
-    print("Treesitter not loaded yet - run :PackerSync")
-end
+-- New way to call LSPs
+vim.lsp.config('lua_ls', {})
+vim.lsp.config('clangd', {})
 
--- Autocomplete
-local cmp_status, cmp = pcall(require, 'cmp')
-if cmp_status then
-    cmp.setup({
-        mapping = cmp.mapping.preset.insert({
-            ['<C-Space>'] = cmp.mapping.complete(),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = { { name = 'nvim_lsp' } },
-    })
-end
+require('cmp').setup({
+    mapping = require('cmp').mapping.preset.insert({
+        ['<C-Space>'] = require('cmp').mapping.complete(),
+        ['<CR>'] = require('cmp').mapping.confirm({ select = true }),
+    }),
+    sources = { { name = 'nvim_lsp' } },
+})
 
--- Colors
+require('lualine').setup({ options = { globalstatus = true } })
+
+require('nvim-treesitter.configs').setup({
+    ensure_installed = { "lua", "python", "c", "cpp" },
+    highlight = { enable = true },
+})
+
+require('Comment').setup()
+require('git-conflict').setup()
+require('gitsigns').setup()
+require('winshift').setup()
+
+-- Theme
 vim.cmd [[colorscheme moonfly]]
 vim.opt.cursorline = true
 
--- Plugin keymaps
+-- Keymaps
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
 vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope commands' })
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })
-vim.api.nvim_set_keymap('n', '<leader>/', '<cmd>lua require("Comment.api").toggle.linewise.current()<CR>', opts)
-vim.api.nvim_set_keymap('v', '<leader>/', '<esc><cmd>lua require("Comment.api").toggle.linewise(vim.fn.visualmode())<CR>', opts)
 
--- Open oil at start
+-- Oil Autostart
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         if vim.fn.argc() == 0 then
-            vim.defer_fn(function()
-                require("oil").open(vim.fn.getcwd())
-            end, 0)
+            local oil = require("oil")
+            oil.setup({
+                default_file_explorer = true,
+                columns = { "icon" },
+                view_options = { show_hidden = false },
+            })
+            oil.open()
         end
     end,
 })
