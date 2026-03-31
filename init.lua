@@ -193,13 +193,29 @@ require('packer').startup(function(use)
     use "sindrets/winshift.nvim"
 end)
 
--- Plugin Setup (Modern Neovim 0.11+ style)
+-- =====================
+-- PLUGIN SETUP
+-- =====================
+
+-- OIL SETUP FIRST (To avoid "nil value" errors)
+require('oil').setup({
+    default_file_explorer = true,
+    columns = { "icon" },
+    view_options = { show_hidden = false },
+})
+
 require('mason').setup()
 require('mason-lspconfig').setup()
 
--- New way to call LSPs
-vim.lsp.config('lua_ls', {})
-vim.lsp.config('clangd', {})
+-- LSP (Fixed for 0.11+)
+if vim.lsp.config then
+    vim.lsp.config('lua_ls', {})
+    vim.lsp.config('clangd', {})
+else
+    -- Fallback for older versions
+    require('lspconfig').lua_ls.setup{}
+    require('lspconfig').clangd.setup{}
+end
 
 require('cmp').setup({
     mapping = require('cmp').mapping.preset.insert({
@@ -233,17 +249,9 @@ vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope 
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })
 
--- Oil Autostart
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        if vim.fn.argc() == 0 then
-            local oil = require("oil")
-            oil.setup({
-                default_file_explorer = true,
-                columns = { "icon" },
-                view_options = { show_hidden = false },
-            })
-            oil.open()
-        end
-    end,
-})
+-- Oil Autostart (Simple & Direct)
+if vim.fn.argc() == 0 then
+    vim.defer_fn(function()
+        require("oil").open()
+    end, 1)
+end
