@@ -5,6 +5,9 @@
 -- 24-bit colour
 vim.opt.termguicolors = true
 
+-- Shada/memory
+vim.opt.shada = "'100,<50,s10,h"
+
 -- reduce log size
 vim.lsp.log.set_level("error")
 

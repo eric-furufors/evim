@@ -13,6 +13,7 @@ ensure_line() {
 }
 
 ensure_line "set -g mode-keys vi" ~/.tmux.conf
+ensure_line "set -g set-clipboard on" ~/.tmux.conf
 ensure_line "set -g base-index 1" ~/.tmux.conf
 ensure_line "set -g pane-base-index 1" ~/.tmux.conf
 ensure_line "set -s escape-time 0" ~/.tmux.conf
