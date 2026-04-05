@@ -191,9 +191,19 @@ require('packer').startup(function(use)
     use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
     use 'bluz71/vim-moonfly-colors'
     use 'numToStr/Comment.nvim'
-    use { 'akinsho/git-conflict.nvim', tag = "*" }
     use 'lewis6991/gitsigns.nvim'
-    use "sindrets/winshift.nvim"
+    use 'sindrets/winshift.nvim'
+    use {
+        'Efuri/git-conflict.nvim',
+        tag = "*",
+        config = function()
+            require('git-conflict').setup({
+                default_mappings = true,
+                default_commands = true,
+                disable_diagnostics = true,
+            })
+        end
+    }
 end)
 
 -- =====================
@@ -236,9 +246,9 @@ require('nvim-treesitter.configs').setup({
 })
 
 require('Comment').setup()
-require('git-conflict').setup()
 require('gitsigns').setup()
 require('winshift').setup()
+
 
 -- Theme
 vim.cmd [[colorscheme moonfly]]
