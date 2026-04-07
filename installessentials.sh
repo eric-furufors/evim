@@ -17,4 +17,5 @@ ensure_line "set -g set-clipboard on" ~/.tmux.conf
 ensure_line "set -g base-index 1" ~/.tmux.conf
 ensure_line "set -g pane-base-index 1" ~/.tmux.conf
 ensure_line "set -s escape-time 0" ~/.tmux.conf
+ensure_line "set-option -g renumber-windows on" ~/.tmux.conf
 ensure_line "export NVIM_LOG_LEVEL=info" ~/.bashrc

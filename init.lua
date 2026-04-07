@@ -50,6 +50,8 @@ local opts = { noremap = true, silent = true }
 -- Diagnostics / LSP
 vim.keymap.set('n', '<leader>ii', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
+vim.keymap.set("n", "<leader>ip", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { desc = "Preview Definition" })
+vim.keymap.set('n', '<leader>ih', ':FSHere<cr>', { silent = true }, { desc = 'Switch between companion files'})
 
 -- Tabs
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', opts)
@@ -204,6 +206,15 @@ require('packer').startup(function(use)
             })
         end
     }
+    use {
+        'rmagatti/goto-preview',
+        config = function()
+            require('goto-preview').setup {
+                default_mappings = false; -- We want to use our own keys
+            }
+        end
+    }
+    use 'derekwyatt/vim-fswitch'
 end)
 
 -- =====================
