@@ -18,8 +18,8 @@ require("catppuccin").setup({
     },
     custom_highlights = function(colors)
         return {
-            ["Comment"]                = { fg = colors.overlay0, style = { "italic" } },
-            ["@comment"]               = { fg = colors.overlay0, style = { "italic" } },
+            ["Comment"]                = { fg = "#8a8aaa", style = { "italic" } },
+            ["@comment"]               = { fg = "#8a8aaa", style = { "italic" } },
             ["@keyword"]               = { fg = colors.pink, style = { "bold" } },
             ["@keyword.return"]        = { fg = colors.pink, style = { "bold" } },
             ["@keyword.function"]      = { fg = colors.pink, style = { "bold" } },
@@ -47,6 +47,10 @@ require("catppuccin").setup({
             ["@operator"]              = { fg = colors.subtext0 },
             ["@namespace"]             = { fg = colors.teal, style = { "italic" } },
             ["@module"]                = { fg = colors.teal, style = { "italic" } },
+            ["LineNr"] = { fg = "#625f80" },
+            ["CursorLineNr"]           = { fg = colors.text },
+            ["FoldColumn"]             = { fg = "#4a4860", bg = "#000000" },
+            ["SignColumn"]             = { fg = "#4a4860", bg = "#000000" },
         }
     end,
 })
