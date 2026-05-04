@@ -18,4 +18,6 @@ ensure_line "set -g base-index 1" ~/.tmux.conf
 ensure_line "set -g pane-base-index 1" ~/.tmux.conf
 ensure_line "set -s escape-time 0" ~/.tmux.conf
 ensure_line "set-option -g renumber-windows on" ~/.tmux.conf
+ensure_line 'set -g default-terminal "screen-256color"' ~/.tmux.conf
+ensure_line 'set -as terminal-overrides ",xterm-256color:Tc"' ~/.tmux.conf
 ensure_line "export NVIM_LOG_LEVEL=info" ~/.bashrc
