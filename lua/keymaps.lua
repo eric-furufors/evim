@@ -21,34 +21,6 @@ vim.keymap.set('n', '<leader>wJ', '<C-w>J', opts)
 vim.keymap.set('n', '<leader>wK', '<C-w>K', opts)
 vim.keymap.set('n', '<leader>wL', '<C-w>L', opts)
 
--- ============================================================
--- Swedish Keyboard Remaps
--- ============================================================
-
--- [] everywhere (AltGr+öä in all modes, plain öä in normal/visual)
-vim.keymap.set({'n', 'v', 'o'}, '<M-ö>', '[', { remap = true })
-vim.keymap.set({'n', 'v', 'o'}, '<M-ä>', ']', { remap = true })
-vim.keymap.set('i', '<M-ö>', '[', {})
-vim.keymap.set('i', '<M-ä>', ']', {})
-vim.keymap.set('i', '<M-,>', '{', {})
-vim.keymap.set({'n', 'v', 'o'}, '<M-,>', '{', {})
-vim.keymap.set({'n', 'v', 'o'}, '<M-.>', '}', {})
-vim.keymap.set({'n', 'v', 'o'}, '<M-->', '}', {})
-
--- {} in insert only (AltGr+,. and AltGr+-)
-vim.keymap.set('i', '<M-,>', '{', {})
-vim.keymap.set('i', '<M-.>', '}', {})
-vim.keymap.set('i', '<M-->', '}', {})
-
--- $ and ^ in normal/visual (AltGr+å and AltGr+p)
-vim.keymap.set({'n', 'v', 'o'}, '<M-å>', '$', { remap = true })
-vim.keymap.set({'n', 'v', 'o'}, '<M-p>', '^', { remap = true })
-vim.keymap.set({'n', 'v', 'o'}, '<M-->', '}', { remap = true })
-
--- $ and ~ in insert (AltGr+å and AltGr+p)
-vim.keymap.set('i', '<M-å>', '$', {})
-vim.keymap.set('i', '<M-p>', '~', {})
-
 -- Save/Quit
 vim.keymap.set('n', '<leader>ww', ':w<CR>', opts)
 vim.keymap.set('n', '<leader>wa', ':wa<CR>', opts)
