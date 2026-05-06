@@ -202,3 +202,17 @@ require("ibl").setup({
         filetypes = { "help", "terminal", "lazy", "packer", "telescope", "oil" },
     },
 })
+
+
+local status, ts = pcall(require, "nvim-treesitter.configs")ppna den filen och klistra in setup-koden där. Eftersom den filen körs *efter* att Neovim start
+if not status then 
+    return -- Om pluginet inte är installerat än, gör ingenting (slipper krash!)
+end
+
+ts.setup({
+  ensure_installed = { "c", "lua", "vim", "vimdoc" },
+  prefer_git = true, -- Din räddare på universitetet!
+  highlight = {
+    enable = true,
+  },
+})

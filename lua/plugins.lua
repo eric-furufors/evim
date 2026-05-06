@@ -14,21 +14,7 @@ require('packer').startup(function(use)
     use 'tpope/vim-fugitive'
     use { 'isak102/telescope-git-file-history.nvim', requires = { 'tpope/vim-fugitive', 'nvim-telescope/telescope.nvim' } }
     use 'nvim-lualine/lualine.nvim'
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
-        config = function()
-            require('nvim-treesitter.configs').setup({
-                -- Här lägger vi till det vi pratade om
-                prefer_git = true,
-
-                highlight = {
-                    enable = true,
-                },
-                ensure_installed = { "c", "lua" }, -- Installera automatiskt det du behöver för Pintos
-            })
-        end
-    }
+    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
     use { "catppuccin/nvim", as = "catppuccin" }
     use 'numToStr/Comment.nvim'
     use 'lewis6991/gitsigns.nvim'
