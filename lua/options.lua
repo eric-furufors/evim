@@ -22,5 +22,5 @@ vim.opt.relativenumber = true
 vim.opt.foldcolumn = "auto"
 vim.o.timeoutlen = 500
 vim.o.ttimeoutlen = 10
-vim.opt.winbar = "%f %m"
 vim.opt.cursorline = true
+vim.opt.winbar = nil

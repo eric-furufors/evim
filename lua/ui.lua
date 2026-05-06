@@ -137,6 +137,12 @@ require("catppuccin").setup({
             ["TelescopeResultsNormal"]   = { fg = P.subtext0, bg = P.base },
             ["TelescopePreviewNormal"]   = { fg = P.text,     bg = P.base },
             ["TelescopeResultsComment"]  = { fg = P.overlay0, style = { "italic" } },
+
+            -- Popup / right-click context menu
+            ["Pmenu"]      = { fg = P.text,     bg = P.surface0 },
+            ["PmenuSel"]   = { fg = P.base,     bg = P.pink,    style = { "bold" } },
+            ["PmenuSbar"]  = { bg = P.surface1 },
+            ["PmenuThumb"] = { bg = P.overlay0 },
         }
     end,
 })
@@ -157,7 +163,37 @@ require('lualine').setup({
         component_separators = { left = "", right = "" },
         section_separators   = { left = "", right = "" },
     },
+    sections = {
+        lualine_b = { 'branch', 'diff', 'diagnostics' },
+        lualine_c = {
+            { 'filename', path = 1, padding = { left = 1, right = 0 } },
+            {
+                function()
+                    local ok, ts = pcall(require, 'nvim-treesitter')
+                    if not ok then return "" end
+
+                    local func = ts.statusline({ indicator_size = 100, type_patterns = { 'class', 'function', 'method' } })
+                    if func and #func > 40 then func = func:sub(1, 37) .. "..." end
+
+                    if func and func ~= "" then
+                        return " -> %#LuaLineFunc#" .. func
+                    else
+                        return ""
+                    end
+                end,
+                color = { fg = P.text, bg = P.surface1 },
+                padding = { left = 1, right = 1 },
+            }
+        },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
+    },
 })
+
+vim.api.nvim_set_hl(0, "LuaLineFunc", { fg = P.mauve, bg = P.surface1 })
+
+
 
 require("ibl").setup({
     indent = { char = "│", tab_char = "│" },
