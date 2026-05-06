@@ -204,9 +204,9 @@ require("ibl").setup({
 })
 
 
-local status, ts = pcall(require, "nvim-treesitter.configs")ppna den filen och klistra in setup-koden där. Eftersom den filen körs *efter* att Neovim start
+local status, ts = pcall(require, "nvim-treesitter.configs")
 if not status then 
-    return -- Om pluginet inte är installerat än, gör ingenting (slipper krash!)
+    return
 end
 
 ts.setup({
