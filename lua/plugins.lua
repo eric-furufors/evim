@@ -21,7 +21,7 @@ require('packer').startup(function(use)
     use 'sindrets/winshift.nvim'
     use "lukas-reineke/indent-blankline.nvim"
     use {
-        'Efuri/git-conflict.nvim',
+        'eric-furufors/git-conflict.nvim',
         tag = "*",
         config = function()
             require('git-conflict').setup({

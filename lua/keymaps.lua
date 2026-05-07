@@ -26,10 +26,6 @@ vim.keymap.set('n', '<leader>ww', ':w<CR>', opts)
 vim.keymap.set('n', '<leader>wa', ':wa<CR>', opts)
 vim.keymap.set('n', '<leader>qq', ':q<CR>', opts)
 vim.keymap.set('n', '<leader>qa', ':qa<CR>', opts)
-vim.keymap.set('n', '<leader>qs', function()
-    vim.cmd('mks! s.nvim')
-    vim.cmd('qa')
-end, opts)
 
 -- Splits
 vim.keymap.set('n', 'ss', ':split<CR>', opts)
