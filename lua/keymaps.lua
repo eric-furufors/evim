@@ -7,8 +7,12 @@ vim.keymap.set("n", "<leader>ip", "<cmd>lua require('goto-preview').goto_preview
 vim.keymap.set('n', '<leader>ih', ':FSHere<cr>', { silent = true }, { desc = 'Switch between companion files' })
 
 -- Tabs
+local function open_tmux_tab_here()
+    local dir = vim.fn.expand('%:p:h')
+    vim.fn.system(string.format('tmux new-window -c "%s"', dir))
+end
 vim.keymap.set('n', '<leader>tn', ':tabnew<CR>', opts)
-vim.keymap.set('n', '<leader>tt', ':tabnew | terminal<CR>', opts)
+vim.keymap.set('n', '<leader>tt', open_tmux_tab_here, { desc = 'Open current directory in new tmux tab' })
 vim.keymap.set('n', '<leader>tc', ':tabc<CR>', opts)
 
 -- Window navigation
@@ -28,6 +32,20 @@ vim.keymap.set('n', '<leader>qq', ':q<CR>', opts)
 vim.keymap.set('n', '<leader>qa', ':qa<CR>', opts)
 
 -- Splits
+local function nvim_root_vsplit()
+    local current_dir = vim.fn.expand('%:p:h')
+    
+    local root_file = vim.fs.find({'.git', 'Makefile', 'go.mod', 'Cargo.toml'}, {
+        path = current_dir,
+        upward = true
+    })[1]
+    
+    local target_dir = root_file and vim.fn.fnamemodify(root_file, ':h') or current_dir
+
+    -- Using 'botright vsplit' forces the new window to the far right
+    vim.cmd('botright vsplit | e ' .. target_dir)
+end
+vim.keymap.set('n', '<leader>se', nvim_root_vsplit, { desc = 'vsplit right at project root' })
 vim.keymap.set('n', 'ss', ':split<CR>', opts)
 vim.keymap.set('n', 'sv', ':vsplit<CR>', opts)
 
@@ -55,8 +73,10 @@ vim.keymap.set('v', '<leader>p', '"_dP')
 vim.keymap.set('', '<F1>', '<Nop>', opts)
 
 -- Telescope / Git
+local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
+vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols, { desc = 'Fuzzy Workspace Symbols' })
 vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope commands' })
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })
