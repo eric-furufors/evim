@@ -40,4 +40,5 @@ require('packer').startup(function(use)
         end
     }
     use 'derekwyatt/vim-fswitch'
+    use 'mbbill/undotree'
 end)

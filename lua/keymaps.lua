@@ -5,6 +5,9 @@ vim.keymap.set('n', '<leader>ii', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
 vim.keymap.set("n", "<leader>ip", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { desc = "Preview Definition" })
 vim.keymap.set('n', '<leader>ih', ':FSHere<cr>', { silent = true }, { desc = 'Switch between companion files' })
+vim.keymap.set('n', '<C-k>', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+end, { desc = 'Toggle inlay hints' })
 
 -- Tabs
 local function open_tmux_tab_here()
@@ -71,6 +74,9 @@ vim.keymap.set('v', '<leader>p', '"_dP')
 
 -- Disable F1
 vim.keymap.set('', '<F1>', '<Nop>', opts)
+
+-- Undotree
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
 
 -- Telescope / Git
 local builtin = require('telescope.builtin')

@@ -148,6 +148,7 @@ require("catppuccin").setup({
 })
 vim.cmd [[colorscheme catppuccin-mocha]]
 
+
 -- Lualine — all values flow from P
 require('lualine').setup({
     options = {
