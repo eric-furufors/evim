@@ -79,10 +79,9 @@ vim.keymap.set('', '<F1>', '<Nop>', opts)
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotree' })
 
 -- Telescope / Git
-local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
-vim.keymap.set('n', '<leader>fs', builtin.lsp_dynamic_workspace_symbols, { desc = 'Fuzzy Workspace Symbols' })
+vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'Fuzzy Workspace Symbols' })
 vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope commands' })
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })

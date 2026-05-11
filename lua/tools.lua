@@ -1,9 +1,13 @@
-require('oil').setup({
-    default_file_explorer = true,
-    columns = { "icon" },
-    view_options = { show_hidden = false },
-    use_default_keymaps = false,
-    keymaps = {
+return {
+
+  {
+    "stevearc/oil.nvim",
+    opts = {
+      default_file_explorer = true,
+      columns = { "icon" },
+      view_options = { show_hidden = false },
+      use_default_keymaps = false,
+      keymaps = {
         ["<CR>"] = "actions.select",
         ["<BS>"] = "actions.parent",
         ["_"]    = "actions.open_cwd",
@@ -12,25 +16,38 @@ require('oil').setup({
         ["g."]   = "actions.toggle_hidden",
         ["g?"]   = "actions.show_help",
         ["gx"]   = "actions.open_external",
+      },
     },
-})
+    init = function()
+      if vim.fn.argc() == 0 then
+        vim.defer_fn(function()
+          require("oil").open()
+        end, 1)
+      end
+    end,
+  },
 
-local status, ts_configs = pcall(require, "nvim-treesitter.configs")
-if status then
-    ts_configs.setup({
-        ensure_installed = { "lua", "python", "c", "cpp" },
-        highlight = { enable = true },
-    })
-else
-    print("Treesitter hittades inte – kör :PackerSync om du precis har installerat")
-end
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = { "lua", "python", "c", "cpp" },
+      highlight = { enable = true },
+    },
+  },
 
-require('Comment').setup()
-require('gitsigns').setup()
-require('winshift').setup()
+  {
+    "numToStr/Comment.nvim",
+    opts = {},
+  },
 
-if vim.fn.argc() == 0 then
-    vim.defer_fn(function()
-        require("oil").open()
-    end, 1)
-end
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = {},
+  },
+
+  {
+    "sindrets/winshift.nvim",
+    opts = {},
+  },
+
+}

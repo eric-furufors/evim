@@ -1,44 +1,63 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
-require('packer').startup(function(use)
-    use 'wbthomason/packer.nvim'
-    use 'williamboman/mason.nvim'
-    use 'williamboman/mason-lspconfig.nvim'
-    use 'neovim/nvim-lspconfig'
-    use 'hrsh7th/nvim-cmp'
-    use 'hrsh7th/cmp-nvim-lsp'
-    use 'nvim-tree/nvim-web-devicons'
-    use 'stevearc/oil.nvim'
-    use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } }
-    use 'tpope/vim-fugitive'
-    use { 'isak102/telescope-git-file-history.nvim', requires = { 'tpope/vim-fugitive', 'nvim-telescope/telescope.nvim' } }
-    use 'nvim-lualine/lualine.nvim'
-    use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-    use { "catppuccin/nvim", as = "catppuccin" }
-    use 'numToStr/Comment.nvim'
-    use 'lewis6991/gitsigns.nvim'
-    use 'sindrets/winshift.nvim'
-    use "lukas-reineke/indent-blankline.nvim"
-    use {
-        'eric-furufors/git-conflict.nvim',
-        tag = "*",
-        config = function()
-            require('git-conflict').setup({
-                default_mappings = true,
-                default_commands = true,
-                disable_diagnostics = true,
-            })
-        end
-    }
-    use {
-        'rmagatti/goto-preview',
-        config = function()
-            require('goto-preview').setup {
-                default_mappings = false,
-            }
-        end
-    }
-    use 'derekwyatt/vim-fswitch'
-    use 'mbbill/undotree'
-end)
+return {
+
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+  },
+
+  { "nvim-lualine/lualine.nvim" },
+
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "tpope/vim-fugitive",
+      {
+        "isak102/telescope-git-file-history.nvim",
+        dependencies = { "tpope/vim-fugitive" },
+      },
+    },
+  },
+
+  {
+    "stevearc/oil.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {},
+  },
+
+  { "tpope/vim-fugitive" },
+
+  {
+    "sindrets/winshift.nvim",
+    opts = {},
+  },
+
+  {
+    "akinsho/git-conflict.nvim",
+    version = "*",
+    opts = {
+      default_mappings = true,
+      default_commands = true,
+      disable_diagnostics = true,
+    },
+  },
+
+  {
+    "rmagatti/goto-preview",
+    opts = {
+      default_mappings = false,
+    },
+  },
+
+  { "derekwyatt/vim-fswitch" },
+
+  {
+    "mbbill/undotree",
+    cmd = "UndotreeToggle",
+  },
+
+}
