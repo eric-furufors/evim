@@ -22,6 +22,7 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    tag = "v1.9.0",
     priority = 1000,
     opts = {
       no_italic = false,
@@ -159,21 +160,6 @@ return {
         lualine_b = { "branch", "diff", "diagnostics" },
         lualine_c = {
           { "filename", path = 1, padding = { left = 1, right = 0 } },
-          {
-            function()
-              local ok, ts = pcall(require, "nvim-treesitter")
-              if not ok then return "" end
-              local func = ts.statusline({ indicator_size = 100, type_patterns = { "class", "function", "method" } })
-              if func and #func > 40 then func = func:sub(1, 37) .. "..." end
-              if func and func ~= "" then
-                return " -> %#LuaLineFunc#" .. func
-              else
-                return ""
-              end
-            end,
-            color = { fg = P.text, bg = P.surface1 },
-            padding = { left = 1, right = 1 },
-          },
         },
         lualine_x = { "encoding", "fileformat", "filetype" },
         lualine_y = { "progress" },
@@ -194,13 +180,25 @@ return {
   },
 },
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = { "c", "lua", "vim", "vimdoc", "python", "cpp" },
-      prefer_git = true,
-      highlight = { enable = true },
+{
+  "nvim-treesitter/nvim-treesitter",
+  branch = "master",              -- pin to legacy API branch
+  build = ":TSUpdate",
+  main = "nvim-treesitter.configs",
+  init = function()
+    -- Sätts innan pluginet laddas så att det inte söker efter node/tree-sitter-cli
+    require("nvim-treesitter.install").prefer_git = true
+    require("nvim-treesitter.install").compilers = { "gcc" }
+  end,
+  opts = {
+    ensure_installed = { "c", "lua", "vim", "vimdoc", "python", "cpp" },
+    sync_install = false,
+    auto_install = true,
+    highlight = {
+      enable = true,
+      additional_vim_regex_highlighting = false,
     },
   },
+},
 
 }

@@ -27,13 +27,6 @@ return {
     end,
   },
 
-  {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = { "lua", "python", "c", "cpp" },
-      highlight = { enable = true },
-    },
-  },
 
   {
     "numToStr/Comment.nvim",

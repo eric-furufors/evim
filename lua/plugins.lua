@@ -3,12 +3,6 @@ vim.g.loaded_netrwPlugin = 1
 
 return {
 
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000,
-  },
-
   { "nvim-lualine/lualine.nvim" },
 
   {
@@ -59,5 +53,9 @@ return {
     "mbbill/undotree",
     cmd = "UndotreeToggle",
   },
+
+  { 'tpope/vim-dadbod' },
+  { 'kristijanhusak/vim-dadbod-ui' },
+  { 'kristijanhusak/vim-dadbod-completion' },
 
 }
