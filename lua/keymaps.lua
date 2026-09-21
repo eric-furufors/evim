@@ -3,11 +3,16 @@ local opts = { noremap = true, silent = true }
 -- Diagnostics / LSP
 vim.keymap.set('n', '<leader>ii', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<leader>id', vim.lsp.buf.definition, { desc = 'Go to definition' })
-vim.keymap.set("n", "<leader>ip", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { desc = "Preview Definition" })
+vim.keymap.set("n", "<leader>ip", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+    { desc = "Preview Definition" })
 vim.keymap.set('n', '<leader>ih', ':FSHere<cr>', { silent = true }, { desc = 'Switch between companion files' })
 vim.keymap.set('n', '<C-k>', function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = 0 }), { bufnr = 0 })
 end, { desc = 'Toggle inlay hints' })
+vim.keymap.set('n', '<leader>ia', vim.lsp.buf.code_action, { desc = 'Code action' })
+vim.keymap.set('n', '<leader>ir', vim.lsp.buf.rename, { desc = 'Rename symbol' })
+vim.keymap.set('n', '<leader>if', function() require('conform').format({ async = true, lsp_format = 'fallback' }) end,
+    { desc = 'Format file' })
 
 -- Tabs
 local function open_tmux_tab_here()
@@ -37,12 +42,12 @@ vim.keymap.set('n', '<leader>qa', ':qa<CR>', opts)
 -- Splits
 local function nvim_root_vsplit()
     local current_dir = vim.fn.expand('%:p:h')
-    
-    local root_file = vim.fs.find({'.git', 'Makefile', 'go.mod', 'Cargo.toml'}, {
+
+    local root_file = vim.fs.find({ '.git', 'Makefile', 'go.mod', 'Cargo.toml' }, {
         path = current_dir,
         upward = true
     })[1]
-    
+
     local target_dir = root_file and vim.fn.fnamemodify(root_file, ':h') or current_dir
 
     -- Using 'botright vsplit' forces the new window to the far right
@@ -65,7 +70,7 @@ end, { desc = "Compile LaTeX" })
 vim.keymap.set("n", "<leader>lw", function()
     local file = vim.fn.expand("%")
     vim.cmd("write")
-    local output = vim.fn.system({"texcount", file})
+    local output = vim.fn.system({ "texcount", file })
     print(output)
 end, { desc = "Word count LaTeX" })
 
@@ -81,7 +86,8 @@ vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle undotr
 -- Telescope / Git
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = 'Find Files' })
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { desc = 'Live Grep' })
-vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, { desc = 'Fuzzy Workspace Symbols' })
+vim.keymap.set('n', '<leader>fs', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
+    { desc = 'Fuzzy Workspace Symbols' })
 vim.keymap.set('n', '<leader>fa', '<cmd>Telescope<cr>', { desc = 'All Telescope commands' })
 vim.keymap.set('n', '<leader>bb', '<cmd>Gitsigns toggle_current_line_blame<cr>', { desc = 'Toggle git blame' })
 vim.keymap.set('n', '<leader>bh', '<cmd>Telescope git_file_history<cr>', { desc = 'Git file history' })
@@ -130,7 +136,7 @@ vim.api.nvim_create_user_command('BF', function()
         '\\end{lstlisting}'
     }
     vim.api.nvim_buf_set_lines(0, row, row, true, lines)
-    vim.api.nvim_win_set_cursor(0, {row + 2, 0})
+    vim.api.nvim_win_set_cursor(0, { row + 2, 0 })
 end, {})
 
 vim.api.nvim_create_user_command('BILD', function()
@@ -144,7 +150,7 @@ vim.api.nvim_create_user_command('BILD', function()
         '\\end{figure}'
     }
     vim.api.nvim_buf_set_lines(0, row, row, true, lines)
-    vim.api.nvim_win_set_cursor(0, {row + 3, 0})
+    vim.api.nvim_win_set_cursor(0, { row + 3, 0 })
 end, {})
 
 vim.api.nvim_create_user_command('Clean', function(o)

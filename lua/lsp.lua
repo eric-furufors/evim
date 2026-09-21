@@ -1,50 +1,99 @@
 return {
-  { "williamboman/mason.nvim", opts = {} },
+  {
+    "williamboman/mason.nvim",
+    opts = {
+      registries = {
+        "github:mason-org/mason-registry",
+        "github:Crashdummyy/mason-registry", -- provides the roslyn server
+      },
+    },
+  },
   {
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
     opts = {
-      -- Only keep the ones that actually work
-      ensure_installed = { "lua_ls", "clangd" },
+      ensure_installed = { "lua_ls", "clangd", "eslint", "ts_ls" },
     },
   },
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+    },
     opts = {
       servers = {
         lua_ls = {},
         clangd = {},
         pyright = {},
+        eslint = {},   -- linter
+        ts_ls = {},    -- TS/JS/React intellisense
       },
     },
     config = function(_, opts)
-      -- The modern 0.11+ way to enable servers
+      vim.lsp.config("*", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      })
       for server, config in pairs(opts.servers) do
         vim.lsp.config(server, config)
         vim.lsp.enable(server)
       end
+
+      -- ESLint auto-fix on save
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = { "*.js", "*.jsx", "*.ts", "*.tsx" },
+        command = "silent! LspEslintFixAll",
+      })
     end,
   },
 
-  -- DADBOD SETUP (The stable replacement for SQL work)
+  -- C# (Roslyn). Not part of the servers table above.
   {
-    "tpope/vim-dadbod",
-    dependencies = {
-      "kristijanhusak/vim-dadbod-ui",
-      "kristijanhusak/vim-dadbod-completion",
-    },
-    config = function()
-      -- Optional: Setup DBUI settings here
-      vim.g.db_ui_save_location = "~/.config/nvim/db_ui"
+    "seblyng/roslyn.nvim",
+    ft = "cs",
+    opts = {},
+    config = function(_, opts)
+      vim.lsp.config("roslyn", {
+        settings = {
+          ["csharp|inlay_hints"] = {
+            csharp_enable_inlay_hints_for_types = true,
+            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+            dotnet_enable_inlay_hints_for_parameters = true,
+          },
+        },
+      })
+      require("roslyn").setup(opts)
     end,
   },
 
+  -- Prettier
+  {
+    "stevearc/conform.nvim",
+    event = "BufWritePre",
+    opts = {
+      formatters_by_ft = {
+        javascript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        json = { "prettier" },
+        css = { "prettier" },
+        html = { "prettier" },
+        markdown = { "prettier" },
+      },
+      -- C# has no entry, so it falls back to Roslyn's formatter
+      format_on_save = { timeout_ms = 2000, lsp_format = "fallback" },
+    },
+  },
+
+  -- Completion
   {
     "hrsh7th/nvim-cmp",
-    dependencies = { 
+    dependencies = {
       "hrsh7th/cmp-nvim-lsp",
-      "kristijanhusak/vim-dadbod-completion", -- Add this as a dependency
+      "hrsh7th/cmp-buffer",
     },
     opts = function(_, opts)
       local cmp = require("cmp")
@@ -52,20 +101,10 @@ return {
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<CR>"] = cmp.mapping.confirm({ select = true }),
       })
-      -- This is the key: Tell cmp to use Dadbod for sql files
       opts.sources = cmp.config.sources({
         { name = "nvim_lsp" },
       }, {
         { name = "buffer" },
-      })
-
-      -- Add this specifically for SQL files
-      cmp.setup.filetype({ "sql", "mysql", "plsql" }, {
-        sources = cmp.config.sources({
-          { name = "vim-dadbod-completion" },
-        }, {
-          { name = "buffer" },
-        }),
       })
     end,
   },

@@ -3,59 +3,55 @@ vim.g.loaded_netrwPlugin = 1
 
 return {
 
-  { "nvim-lualine/lualine.nvim" },
+    { "nvim-lualine/lualine.nvim" },
 
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "tpope/vim-fugitive",
-      {
-        "isak102/telescope-git-file-history.nvim",
-        dependencies = { "tpope/vim-fugitive" },
-      },
+    {
+        "nvim-telescope/telescope.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "tpope/vim-fugitive",
+            {
+                "isak102/telescope-git-file-history.nvim",
+                dependencies = { "tpope/vim-fugitive" },
+            },
+        },
     },
-  },
 
-  {
-    "stevearc/oil.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {},
-  },
-
-  { "tpope/vim-fugitive" },
-
-  {
-    "sindrets/winshift.nvim",
-    opts = {},
-  },
-
-  {
-    "akinsho/git-conflict.nvim",
-    version = "*",
-    opts = {
-      default_mappings = true,
-      default_commands = true,
-      disable_diagnostics = true,
+    {
+        "stevearc/oil.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        opts = {},
     },
-  },
 
-  {
-    "rmagatti/goto-preview",
-    opts = {
-      default_mappings = false,
+    { "tpope/vim-fugitive" },
+
+    {
+        "sindrets/winshift.nvim",
+        opts = {},
     },
-  },
 
-  { "derekwyatt/vim-fswitch" },
+    {
+        "akinsho/git-conflict.nvim",
+        version = "*",
+        opts = {
+            default_mappings = true,
+            default_commands = true,
+            disable_diagnostics = true,
+        },
+    },
 
-  {
-    "mbbill/undotree",
-    cmd = "UndotreeToggle",
-  },
+    {
+        "rmagatti/goto-preview",
+        opts = {
+            default_mappings = false,
+        },
+    },
 
-  { 'tpope/vim-dadbod' },
-  { 'kristijanhusak/vim-dadbod-ui' },
-  { 'kristijanhusak/vim-dadbod-completion' },
+    { "derekwyatt/vim-fswitch" },
+
+    {
+        "mbbill/undotree",
+        cmd = "UndotreeToggle",
+    },
 
 }
