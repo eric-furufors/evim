@@ -182,23 +182,33 @@ return {
 
     {
         "nvim-treesitter/nvim-treesitter",
-        branch = "master", -- pin to legacy API branch
         build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
         init = function()
-            -- Sätts innan pluginet laddas så att det inte söker efter node/tree-sitter-cli
             require("nvim-treesitter.install").prefer_git = true
             require("nvim-treesitter.install").compilers = { "gcc" }
         end,
-        opts = {
-            ensure_installed = { "c", "lua", "vim", "vimdoc", "python", "cpp", "c_sharp", "javascript", "typescript", "tsx", "json", "html", "css" },
-            sync_install = false,
-            auto_install = true,
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = false,
-            },
-        },
+        config = function()
+            local parsers = { 
+                "c", "lua", "vim", "vimdoc", "python", "cpp", 
+                "c_sharp", "javascript", "typescript", "tsx", 
+                "json", "html", "css" 
+            }
+
+            -- Check if parser exists natively using vim.treesitter
+            for _, parser in ipairs(parsers) do
+                local installed = pcall(vim.treesitter.language.add, parser)
+                if not installed then
+                    vim.cmd("TSInstall " .. parser)
+                end
+            end
+
+            -- Enable syntax highlighting on FileType
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function()
+                    pcall(vim.treesitter.start)
+                end,
+            })
+        end,
     },
 
 }
