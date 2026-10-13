@@ -2,7 +2,7 @@
 set -euo pipefail
 
 sudo apt update
-sudo apt install -y ninja-build gettext cmake unzip curl build-essential git ripgrep nodejs npm
+sudo apt install -y ninja-build gettext cmake curl build-essential git ripgrep nodejs
 
 # Neovim (stable release)
 if [ -d "$HOME/neovim" ]; then
