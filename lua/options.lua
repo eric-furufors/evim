@@ -23,3 +23,4 @@ vim.o.timeoutlen = 500
 vim.o.ttimeoutlen = 10
 vim.opt.cursorline = true
 vim.opt.winbar = ""
+vim.opt.signcolumn = "yes"
