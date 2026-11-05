@@ -1,3 +1,11 @@
+local ts_inlay_hints = {
+    includeInlayParameterNameHints = "all",
+    includeInlayVariableTypeHints = true,
+    includeInlayFunctionParameterTypeHints = true,
+    includeInlayPropertyDeclarationTypeHints = true,
+    includeInlayFunctionLikeReturnTypeHints = true,
+}
+
 return {
     {
         "williamboman/mason.nvim",
@@ -12,7 +20,7 @@ return {
         "williamboman/mason-lspconfig.nvim",
         dependencies = { "williamboman/mason.nvim" },
         opts = {
-            ensure_installed = { "lua_ls", "clangd", "eslint", "ts_ls" },
+            ensure_installed = { "lua_ls", "clangd", "eslint", "ts_ls", "csharp_ls" },
         },
     },
     {
@@ -28,7 +36,22 @@ return {
                 clangd = {},
                 pyright = {},
                 eslint = {}, -- linter
-                ts_ls = {}, -- TS/JS/React intellisense
+                ts_ls = {    -- TS/JS/React intellisense
+                    settings = {
+                        typescript = { inlayHints = ts_inlay_hints },
+                        javascript = { inlayHints = ts_inlay_hints },
+                    },
+                },
+                csharp_ls = { -- C# (decompiled go-to-definition into framework code)
+                    handlers = {
+                        ["textDocument/definition"] = function(...)
+                            return require("csharpls_extended").handler(...)
+                        end,
+                        ["textDocument/typeDefinition"] = function(...)
+                            return require("csharpls_extended").handler(...)
+                        end,
+                    },
+                },
             },
         },
         config = function(_, opts)
@@ -48,23 +71,12 @@ return {
         end,
     },
 
-    -- C# (Roslyn). Not part of the servers table above.
+    -- C#: lets go-to-definition open decompiled framework code (csharp_ls)
     {
-        "seblyng/roslyn.nvim",
+        "Decodetalkers/csharpls-extended-lsp.nvim",
         ft = "cs",
-        opts = {},
-        config = function(_, opts)
-            vim.lsp.config("roslyn", {
-                settings = {
-                    ["csharp|inlay_hints"] = {
-                        csharp_enable_inlay_hints_for_types = true,
-                        csharp_enable_inlay_hints_for_implicit_variable_types = true,
-                        csharp_enable_inlay_hints_for_lambda_parameter_types = true,
-                        dotnet_enable_inlay_hints_for_parameters = true,
-                    },
-                },
-            })
-            require("roslyn").setup(opts)
+        config = function()
+            require("csharpls_extended").buf_read_cmd_bind()
         end,
     },
 

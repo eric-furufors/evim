@@ -54,4 +54,30 @@ return {
         cmd = "UndotreeToggle",
     },
 
+    {
+        "sindrets/diffview.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+            enhanced_diff_hl = true,
+            view = { default = { layout = "diff2_horizontal" } },
+            keymaps = {
+                view = {
+                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
+                },
+                file_panel = {
+                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
+                },
+                file_history_panel = {
+                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
+                },
+            },
+            hooks = {
+                view_opened = function()
+                    -- Dölj panelen direkt när vyn öppnas
+                    vim.schedule(function() vim.cmd("DiffviewToggleFiles") end)
+                end,
+            },
+        },
+    },
+
 }

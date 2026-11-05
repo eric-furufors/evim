@@ -2,3 +2,4 @@ node_modules
 plugin
 package*
 neovim
+lazy-lock.json
