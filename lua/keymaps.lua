@@ -105,8 +105,9 @@ end
 
 vim.keymap.set('n', '<leader>fh', function()
     require('telescope.builtin').git_commits({
-        attach_mappings = function(_, map)
-            map({ 'i', 'n' }, '<CR>', open_diffview_for_commit)
+        attach_mappings = function()
+            local actions = require('telescope.actions')
+            actions.select_default:replace(open_diffview_for_commit)
             return true
         end,
     })
@@ -117,17 +118,18 @@ vim.keymap.set('n', '<leader>gh', function()
     local file = vim.fn.expand('%:p')
     require('telescope.builtin').git_bcommits({
         prompt_title = 'File history',
-        attach_mappings = function(_, map)
-            map({ 'i', 'n' }, '<CR>', function(prompt_bufnr)
+        attach_mappings = function()
+            local actions = require('telescope.actions')
+            actions.select_default:replace(function(prompt_bufnr)
                 local entry = require('telescope.actions.state').get_selected_entry()
-                require('telescope.actions').close(prompt_bufnr)
-                -- Visa bara den här filens ändringar i den valda commiten
+                actions.close(prompt_bufnr)
                 vim.cmd('DiffviewOpen ' .. entry.value .. '^! -- ' .. vim.fn.fnameescape(file))
             end)
             return true
         end,
     })
 end, d('File history (Telescope + Diffview)'))
+
 vim.keymap.set('n', '<leader>gf', '<cmd>DiffviewFileHistory %<cr>', d('File history (Diffview)'))
 vim.keymap.set('n', '<leader>gd', '<cmd>DiffviewOpen<cr>', d('Diffview working tree'))
 vim.keymap.set('n', '<leader>gc', '<cmd>DiffviewClose<cr>', d('Close Diffview'))
