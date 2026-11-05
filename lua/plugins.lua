@@ -1,6 +1,16 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+local noquit = {
+    { "n", "<leader>qq", "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "<leader>qa", "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "ZZ",         "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "ZQ",         "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "<C-w>q",     "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "<C-w>c",     "<Nop>", { desc = "Disabled in Diffview" } },
+    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
+}
+
 return {
 
     { "nvim-lualine/lualine.nvim" },
@@ -61,15 +71,9 @@ return {
             enhanced_diff_hl = true,
             view = { default = { layout = "diff2_horizontal" } },
             keymaps = {
-                view = {
-                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
-                },
-                file_panel = {
-                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
-                },
-                file_history_panel = {
-                    { "n", "q", "<cmd>DiffviewClose<cr>", { desc = "Close Diffview" } },
-                },
+                view = noquit,
+                file_panel = noquit,
+                file_history_panel = noquit,
             },
             hooks = {
                 view_opened = function()
